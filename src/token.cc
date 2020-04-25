@@ -25,7 +25,7 @@ Token::~Token()
 }
 
 
-Token & Token::operator=(Token & t) noexcept
+Token & Token::operator=(const Token & t) noexcept
 {
     if (this->type != t.type)
     {
@@ -51,7 +51,7 @@ Token & Token::operator=(Token & t) noexcept
     return *this;
 }
 
-bool Token::operator==(Token & t) const noexcept
+bool Token::operator==(const Token & t) const noexcept
 {
     bool is_eq;
 
@@ -73,7 +73,7 @@ bool Token::operator==(Token & t) const noexcept
     return is_eq;
 }
 
-bool Token::operator<(Token & t) const noexcept
+bool Token::operator<(const Token & t) const noexcept
 {
     bool is_lt;
 

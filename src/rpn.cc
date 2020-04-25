@@ -18,6 +18,9 @@ static std::int8_t priority(char opr)
     case '^':
         return '4';
 
+    case '~':
+        return INT8_MAX - 1;
+
     default:
         return INT8_MIN;
     }
@@ -41,8 +44,9 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
 
         case Token::Type::Operator :
             if (stack.empty() || token.asOperator() == '(' ||
+                (token.asOperator() != ')' && (
                 priority(token.asOperator()) >= priority(stack.top().asOperator()) ||
-                stack.top().asOperator() == '(')
+                stack.top().asOperator() == '(')))
             {
                 stack.push(std::move(token));
             }

@@ -61,9 +61,9 @@ namespace hgl
             const char * asSymbol() const noexcept
                 {return this->value.sym;}
 
-            Token & operator=(Token & t) noexcept;
-            bool operator==(Token & t) const noexcept;
-            bool operator<(Token & t) const noexcept;
+            Token & operator=(const Token & t) noexcept;
+            bool operator==(const Token & t) const noexcept;
+            bool operator<(const Token & t) const noexcept;
         };
 
 

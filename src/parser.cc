@@ -9,6 +9,9 @@ static std::uint8_t oprdcnt(char opr)
 {
     switch (opr)
     {
+    case '~':
+        return 1;
+
     default:
         return 2;
     }
@@ -34,6 +37,18 @@ AST Parser::parse(TokenStream && in)
                 AST::Node node(std::move(token));
 
                 auto n = oprdcnt(node.value.asOperator());
+                if (n > stack.size())
+                {
+                    if (node.value.asOperator() == '-' && stack.size() == 1)
+                    // opr_neg, e.g. -1, -NUM
+                    {
+                        node.value = Token('~');
+                        n = 1;
+                    }
+                    else
+                        throw std::runtime_error("no enough tokens in stack");
+                }
+
                 while (n--)
                 {
                     auto & oprd = stack.top();

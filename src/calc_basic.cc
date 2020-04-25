@@ -28,3 +28,8 @@ double _calc_pow(CalcFn::OprdList oprds)
     return std::pow(oprds[0], oprds[1]);
 }
 
+double _calc_neg(CalcFn::OprdList oprds)
+{
+    return - oprds[0];
+}
+
