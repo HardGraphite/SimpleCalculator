@@ -3,13 +3,10 @@
 using namespace hgl::calc;
 
 static constexpr const char * exprs[] = {
-    "1+1",
-    "2+3*4",
-    "-2*3",
-    "2.5*4+6/(4.33-1.33)",
-    "3.5^(-2)",
-    "(((6+5)-4)*3)/2",
-    "-1+2-3+4-5-6+7+8",
+    "add(1 2)",
+    "add(1, 2)",
+    "exp2((1 + 2) * 3)",
+    "log((1000 / 2 + 12), 2)"
 };
 
 int main(int argc, char const *argv[])

@@ -81,13 +81,7 @@ TokenStream Scanner::scan(std::istream & in)
             break;
 
         case Status::RdLetter :
-            if (std::isdigit(ch))
-            {
-                status = Status::RdNumber;
-                newSymbol();
-                buffer << ch;
-            }
-            else if (std::isalpha(ch))
+            if (std::isalnum(ch))
             {
                 // status = Status::RdLetter;
                 buffer << ch;

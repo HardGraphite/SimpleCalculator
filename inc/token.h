@@ -63,6 +63,9 @@ namespace hgl
 
             Token & operator=(const Token & t) noexcept;
             bool operator==(const Token & t) const noexcept;
+            bool operator==(Number n) const noexcept;
+            bool operator==(Operator o) const noexcept;
+            bool operator==(const char * s) const noexcept;
             bool operator!=(const Token & t) const noexcept;
             bool operator<(const Token & t) const noexcept;
         };

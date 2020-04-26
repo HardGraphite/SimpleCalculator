@@ -17,8 +17,8 @@ static std::uint8_t oprdcnt(char opr)
     }
 }
 
-static const Token sym_start_of_arglist("\x1d");
-static const Token opr_call_function('F');
+static const Token sym_start_of_arglist("#A");
+static const Token sym_call_function("#F");
 
 AST Parser::parse(TokenStream && in)
 {
@@ -54,10 +54,12 @@ AST Parser::parse(TokenStream && in)
             break;
 
         case Token::Type::Symbol :
-            if (!in.empty() && in.front() == opr_call_function)
+            if (token == sym_call_function)
             {
-                in.get();
-                AST::Node node(std::move(token));
+                if (in.empty())
+                    throw std::runtime_error("in-stream error");
+
+                AST::Node node(in.get());
 
                 while (!stack.empty())
                 {

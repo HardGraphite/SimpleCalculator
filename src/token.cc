@@ -76,6 +76,32 @@ bool Token::operator==(const Token & t) const noexcept
     return is_eq;
 }
 
+bool Token::operator==(Number n) const noexcept
+{
+    if (this->type != Type::Number)
+        return false;
+    else
+        return this->value.num == n;
+}
+
+bool Token::operator==(Operator o) const noexcept
+{
+
+    if (this->type != Type::Operator)
+        return false;
+    else
+        return this->value.opr == o;
+}
+
+bool Token::operator==(const char * s) const noexcept
+{
+
+    if (this->type != Type::Symbol)
+        return false;
+    else
+        return std::strncmp(this->value.sym, s, 7);
+}
+
 bool Token::operator!=(const Token & t) const noexcept
 {
     if (this->type != t.type)

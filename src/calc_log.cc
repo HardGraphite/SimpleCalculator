@@ -20,5 +20,5 @@ double _calc_ln(CalcFn::OprdList oprds)
 
 double _calc_log(CalcFn::OprdList oprds)
 {
-    return std::log(oprds[0]) / std::log(oprds[0]);
+    return std::log(oprds[0]) / std::log(oprds[1]);
 }
