@@ -1,11 +1,9 @@
 #include <eval.h>
-#include "calcx.h"
+#include <calcfn.h>
 
 using namespace hgl::calc;
 
-static auto builtin_calcfnpool = getBuiltinCalcFnPool();
-
-double hgl::calc::evaluate(const AST::Node & n)
+double hgl::calc::evaluate(const AST::Node & n, const CalcFnPool * calcfnpool)
 {
     double result;
 
@@ -16,13 +14,12 @@ double hgl::calc::evaluate(const AST::Node & n)
         break;
 
     case Token::Type::Operator : {
-        char opr[2] = {n.value.asOperator(), '\0'};
         const int oprdn = n.child.size();
         double oprds[oprdn];
         auto iter = n.child.begin();
         for (int i = 0; i < oprdn; i++, ++iter)
             oprds[i] = evaluate(*iter);
-        result = builtin_calcfnpool[opr](oprds, oprdn);
+        result = (*calcfnpool)[n.value.asOperator()](oprds, oprdn);
     } break;
 
     case Token::Type::Symbol :
@@ -33,7 +30,7 @@ double hgl::calc::evaluate(const AST::Node & n)
             auto iter = n.child.begin();
             for (int i = 0; i < oprdn; i++, ++iter)
                 oprds[i] = evaluate(*iter);
-            result = builtin_calcfnpool[n.value.asSymbol()](oprds, oprdn);
+            result = (*calcfnpool)[n.value.asSymbol()](oprds, oprdn);
         }
         else // value
             throw std::runtime_error("invalid symbol");
@@ -44,7 +41,7 @@ double hgl::calc::evaluate(const AST::Node & n)
 }
 
 
-double hgl::calc::evaluate(const AST & t)
+double hgl::calc::evaluate(const AST & t, const CalcFnPool *cf)
 {
-    return evaluate(t.getRootC());
+    return evaluate(t.getRootC(), cf);
 }

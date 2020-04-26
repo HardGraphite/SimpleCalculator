@@ -1,9 +1,7 @@
 #include <syntax.h>
 
-#include <stack>
 
 using namespace hgl::calc;
-
 
 static std::int8_t priority(char opr)
 {
@@ -30,10 +28,9 @@ static const Token sym_start_of_arglist("#A");
 static const Token sym_call_function("#F");
 
 
-TokenStream hgl::calc::toRPN(TokenStream && in)
+TokenStream Parser::toRPN(TokenStream && in)
 {
     TokenStream out;
-    std::stack<Token> stack;
 
     while (!in.empty())
     {
@@ -48,26 +45,26 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
         case Token::Type::Operator :
             if (token.asOperator() == ',')
             {
-                if (!stack.empty() && stack.top() != sym_call_function)
+                if (!this->tstack.empty() && this->tstack.top() != sym_call_function)
                 {
-                    auto & top = stack.top();
+                    auto & top = this->tstack.top();
                     out << top;
-                    stack.pop();
+                    this->tstack.pop();
                 }
             }
-            else if (stack.empty() || token.asOperator() == '(' ||
+            else if (this->tstack.empty() || token.asOperator() == '(' ||
                 (token.asOperator() != ')' && (
-                priority(token.asOperator()) > priority(stack.top().asOperator()) ||
-                stack.top().asOperator() == '(')))
+                priority(token.asOperator()) > priority(this->tstack.top().asOperator()) ||
+                this->tstack.top().asOperator() == '(')))
             {
-                stack.push(std::move(token));
+                this->tstack.push(std::move(token));
             }
             else if (token.asOperator() == ')')
             {
-                while (!stack.empty())
+                while (!this->tstack.empty())
                 {
-                    auto & top = stack.top();
-                    stack.pop();
+                    auto & top = this->tstack.top();
+                    this->tstack.pop();
 
                     if (top.asOperator() == '(')
                         break;
@@ -75,28 +72,28 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
                     out << top;
                 }
             }
-            else // priority(token.asOperator()) <= priority(stack.top().asOperator())
+            else // priority(token.asOperator()) <= priority(this->tstack.top().asOperator())
             {
                 auto token_priority = priority(token.asOperator());
 
                 while (true)
                 {
-                    if (stack.empty())
+                    if (this->tstack.empty())
                     {
-                        stack.push(std::move(token));
+                        this->tstack.push(std::move(token));
                         break;
                     }
 
-                    auto & top = stack.top();
+                    auto & top = this->tstack.top();
 
                     if (token_priority > priority(top.asOperator()))
                     {
-                        stack.push(std::move(token));
+                        this->tstack.push(std::move(token));
                         break;
                     }
 
                     out << top;
-                    stack.pop();
+                    this->tstack.pop();
                 }
             }
             break;
@@ -104,9 +101,9 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
         case Token::Type::Symbol :
             if (!in.empty() && in.front() == '(')
             {
-                stack.push(in.get()); // '('
-                stack.push(std::move(token));
-                stack.push(sym_call_function);
+                this->tstack.push(in.get()); // '('
+                this->tstack.push(std::move(token));
+                this->tstack.push(sym_call_function);
                 out << sym_start_of_arglist;
             }
             else
@@ -115,13 +112,13 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
         }
     }
 
-    while (!stack.empty())
+    while (!this->tstack.empty())
     {
-        auto & x = stack.top();
+        auto & x = this->tstack.top();
         if (x == '(')
             throw std::runtime_error("unmatched brackets");
         out << x;
-        stack.pop();
+        this->tstack.pop();
     }
 
     return out;

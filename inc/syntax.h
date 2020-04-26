@@ -3,15 +3,12 @@
 #include <token.h>
 
 #include <list>
+#include <stack>
 
 namespace hgl
 {
     namespace calc
     {
-        // convert to Reverse Polish Notation
-        TokenStream toRPN(TokenStream && ts);
-
-
         class AST
         {
             friend std::ostream & operator<<(std::ostream &, const AST &);
@@ -53,7 +50,17 @@ namespace hgl
 
         class Parser
         {
+        private:
+            // node stack
+            std::stack<AST::Node> nstack;
+            // token stack
+            std::stack<Token> tstack;
+
+            // convert to Reverse Polish Notation
+            TokenStream toRPN(TokenStream && ts);
+
         public:
+            // parse token stream and generate AST
             AST parse(TokenStream && in);
         };
 

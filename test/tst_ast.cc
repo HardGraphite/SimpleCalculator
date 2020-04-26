@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     auto tokens = scanner.scan(ss);
 
     Parser parser;
-    auto ast = parser.parse(toRPN(std::move(tokens)));
+    auto ast = parser.parse(std::move(tokens));
 
     std::cout << ast << '\n';
 

@@ -1,4 +1,4 @@
-#include "calcx.h"
+#include <calcfn.h>
 #include <cmath>
 
 using namespace hgl::calc;

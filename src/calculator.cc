@@ -20,5 +20,5 @@ double hgl::calc::calculate(std::istream & expr)
     Scanner scanner;
     Parser parser;
 
-    return evaluate(parser.parse(toRPN(scanner.scan(expr))));
+    return evaluate(parser.parse(scanner.scan(expr)));
 }

@@ -1,4 +1,4 @@
-#include "calcx.h"
+#include <calcfn.h>
 
 using namespace hgl::calc;
 
@@ -29,7 +29,7 @@ using namespace hgl::calc;
     double _calc_atan(CalcFn::OprdList oprds);
 
 
-static const CalcFnPool builtin_calcfnpool = {
+const CalcFnPool hgl::calc::BuiltinCalcFnPool = {
     {"+", {_calc_add, 2}},
     {"-", {_calc_sub, 2}},
     {"*", {_calc_mul, 2}},
@@ -61,8 +61,3 @@ static const CalcFnPool builtin_calcfnpool = {
     {"acos", {_calc_acos, 1}},
     {"atan", {_calc_atan, 1}},
 };
-
-const CalcFnPool & hgl::calc::getBuiltinCalcFnPool()
-{
-    return builtin_calcfnpool;
-}

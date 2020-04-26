@@ -25,6 +25,7 @@ namespace hgl
             Status            status;
 
         public:
+            // scan input string and generate tokens
             TokenStream scan(std::istream & in);
         };
 

@@ -9,3 +9,5 @@ OBJS := $(filter-out $(OBJDIR)/main.o, $(wildcard $(OBJDIR)/*.o))
 %: %.cc ../src/*.cc
 	make -C ../src c
 	$(CXX) $(CFLAG) -I$(INCDIR) -o bin/$@ $< $(OBJS)
+	@echo '--------------------'
+	bin/$@

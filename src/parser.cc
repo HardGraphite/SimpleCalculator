@@ -1,9 +1,7 @@
 #include <syntax.h>
 
-#include <stack>
 
 using namespace hgl::calc;
-
 
 static std::uint8_t oprdcnt(char opr)
 {
@@ -20,9 +18,9 @@ static std::uint8_t oprdcnt(char opr)
 static const Token sym_start_of_arglist("#A");
 static const Token sym_call_function("#F");
 
-AST Parser::parse(TokenStream && in)
+AST Parser::parse(TokenStream && ts)
 {
-    std::stack<AST::Node> stack;
+    auto in = Parser::toRPN(std::move(ts));
 
     while (!in.empty())
     {
@@ -31,7 +29,7 @@ AST Parser::parse(TokenStream && in)
         switch (token.getType())
         {
         case Token::Type::Number :
-            stack.push(AST::Node(std::move(token)));
+            this->nstack.push(AST::Node(std::move(token)));
             break;
 
         case Token::Type::Operator :
@@ -39,17 +37,17 @@ AST Parser::parse(TokenStream && in)
                 AST::Node node(std::move(token));
 
                 auto n = oprdcnt(node.value.asOperator());
-                if (n > stack.size())
-                        throw std::runtime_error("no enough tokens in stack");
+                if (n > this->nstack.size())
+                        throw std::runtime_error("no enough tokens in this->nstack");
 
                 while (n--)
                 {
-                    auto & oprd = stack.top();
+                    auto & oprd = this->nstack.top();
                     node.newChildR(AST::Node(oprd));
-                    stack.pop();
+                    this->nstack.pop();
                 }
 
-                stack.push(std::move(node));
+                this->nstack.push(std::move(node));
             }
             break;
 
@@ -61,31 +59,34 @@ AST Parser::parse(TokenStream && in)
 
                 AST::Node node(in.get());
 
-                while (!stack.empty())
+                while (!this->nstack.empty())
                 {
-                    auto & oprd = stack.top();
+                    auto & oprd = this->nstack.top();
                     if (oprd.value == sym_start_of_arglist)
                     {
-                        stack.pop();
+                        this->nstack.pop();
                         break;
                     }
                     else
                     {
                         node.newChildR(AST::Node(oprd));
-                        stack.pop();
+                        this->nstack.pop();
                     }
                 }
 
-                stack.push(std::move(node));
+                this->nstack.push(std::move(node));
             }
             else
-                stack.push(AST::Node(std::move(token)));
+                this->nstack.push(AST::Node(std::move(token)));
             break;
         }
     }
 
-    if (stack.size() != 1)
+    if (this->nstack.size() != 1)
         throw std::runtime_error("too many tokens left in stack");
 
-    return AST(stack.top());
+    AST res(this->nstack.top());
+    this->nstack.pop(); // clear stack
+
+    return res;
 }
