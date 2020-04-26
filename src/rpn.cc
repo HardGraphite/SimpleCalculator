@@ -26,6 +26,9 @@ static std::int8_t priority(char opr)
     }
 }
 
+static const Token sym_start_of_arglist("\x1d");
+static const Token opr_call_function('F');
+
 
 TokenStream hgl::calc::toRPN(TokenStream && in)
 {
@@ -84,7 +87,15 @@ TokenStream hgl::calc::toRPN(TokenStream && in)
             break;
 
         case Token::Type::Symbol :
-            out << std::move(token);
+            if (!in.empty() && in.front() == Token('('))
+            {
+                stack.push(in.get()); // '('
+                stack.push(opr_call_function);
+                stack.push(std::move(token));
+                out << sym_start_of_arglist;
+            }
+            else
+                out << std::move(token);
             break;
         }
     }

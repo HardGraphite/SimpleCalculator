@@ -17,6 +17,8 @@ static std::uint8_t oprdcnt(char opr)
     }
 }
 
+static const Token sym_start_of_arglist("\x1d");
+static const Token opr_call_function('F');
 
 AST Parser::parse(TokenStream && in)
 {
@@ -52,7 +54,30 @@ AST Parser::parse(TokenStream && in)
             break;
 
         case Token::Type::Symbol :
-            stack.push(AST::Node(std::move(token)));
+            if (!in.empty() && in.front() == opr_call_function)
+            {
+                in.get();
+                AST::Node node(std::move(token));
+
+                while (!stack.empty())
+                {
+                    auto & oprd = stack.top();
+                    if (oprd.value == sym_start_of_arglist)
+                    {
+                        stack.pop();
+                        break;
+                    }
+                    else
+                    {
+                        node.newChildR(AST::Node(oprd));
+                        stack.pop();
+                    }
+                }
+
+                stack.push(std::move(node));
+            }
+            else
+                stack.push(AST::Node(std::move(token)));
             break;
         }
     }

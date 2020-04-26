@@ -26,7 +26,17 @@ double hgl::calc::evaluate(const AST::Node & n)
     } break;
 
     case Token::Type::Symbol :
-        throw std::runtime_error("invalid symbol");
+        if (n.hasChild()) // function
+        {
+            const int oprdn = n.child.size();
+            double oprds[oprdn];
+            auto iter = n.child.begin();
+            for (int i = 0; i < oprdn; i++, ++iter)
+                oprds[i] = evaluate(*iter);
+            result = builtin_calcfnpool[n.value.asSymbol()](oprds, oprdn);
+        }
+        else // value
+            throw std::runtime_error("invalid symbol");
         break;
     }
 
