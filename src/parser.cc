@@ -38,16 +38,7 @@ AST Parser::parse(TokenStream && in)
 
                 auto n = oprdcnt(node.value.asOperator());
                 if (n > stack.size())
-                {
-                    if (node.value.asOperator() == '-' && stack.size() == 1)
-                    // opr_neg, e.g. -1, -NUM
-                    {
-                        node.value = Token('~');
-                        n = 1;
-                    }
-                    else
                         throw std::runtime_error("no enough tokens in stack");
-                }
 
                 while (n--)
                 {

@@ -16,7 +16,7 @@ static std::int8_t priority(char opr)
         return 2;
 
     case '^':
-        return '4';
+        return 4;
 
     case '~':
         return INT8_MAX - 1;

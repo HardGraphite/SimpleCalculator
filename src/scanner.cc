@@ -48,7 +48,9 @@ TokenStream Scanner::scan(std::istream & in)
             }
             else
             {
-                status = Status::Idle;
+                // status = Status::Idle;
+                if (ch == '-')
+                    ch = '~'; // e.g. "-1+3" --> "~1+3"
                 out << Token(ch);
             }
             break;
