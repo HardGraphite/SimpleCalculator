@@ -49,7 +49,7 @@ TokenStream Scanner::scan(std::istream & in)
             else
             {
                 // status = Status::Idle;
-                if (ch == '-')
+                if (ch == '-' && (out.empty() || out.back() != Token(')')))
                     ch = '~'; // e.g. "-1+3" --> "~1+3"
                 out << Token(ch);
             }

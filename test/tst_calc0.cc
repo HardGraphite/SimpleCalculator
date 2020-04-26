@@ -8,6 +8,7 @@ static constexpr const char * exprs[] = {
     "-2*3",
     "2.5*4+6/(4.33-1.33)",
     "3.5^(-2)",
+    "(((6+5)-4)*3)/2",
 };
 
 int main(int argc, char const *argv[])

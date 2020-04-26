@@ -53,6 +53,9 @@ Token & Token::operator=(const Token & t) noexcept
 
 bool Token::operator==(const Token & t) const noexcept
 {
+    if (this->type != t.type)
+        return false;
+
     bool is_eq;
 
     switch (this->type)
@@ -66,7 +69,32 @@ bool Token::operator==(const Token & t) const noexcept
         break;
 
     case Type::Symbol :
-        is_eq = this->value.sym == t.value.sym;
+        is_eq = std::strncmp(this->value.sym, t.value.sym, 7) == 0;
+        break;
+    }
+
+    return is_eq;
+}
+
+bool Token::operator!=(const Token & t) const noexcept
+{
+    if (this->type != t.type)
+        return true;
+
+    bool is_eq;
+
+    switch (this->type)
+    {
+    case Type::Number :
+        is_eq = this->value.num != t.value.num;
+        break;
+
+    case Type::Operator :
+        is_eq = this->value.opr != t.value.opr;
+        break;
+
+    case Type::Symbol :
+        is_eq = std::strncmp(this->value.sym, t.value.sym, 7) != 0;
         break;
     }
 

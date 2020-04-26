@@ -30,6 +30,8 @@ namespace hgl
                 Token & operator[](std::size_t idx);
                 void newChild(Node && x);
                 void newChildR(Node && x);
+                bool hasChild() const noexcept
+                    {return !this->child.empty();}
             };
 
         private:
