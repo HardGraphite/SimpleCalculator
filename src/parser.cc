@@ -8,6 +8,7 @@ static std::uint8_t oprdcnt(char opr)
     switch (opr)
     {
     case '~':
+    case '$':
         return 1;
 
     default:

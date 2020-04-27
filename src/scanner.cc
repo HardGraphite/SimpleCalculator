@@ -89,7 +89,7 @@ TokenStream Scanner::scan(std::istream & in)
             else if (std::isspace(ch))
             {
                 status = Status::Idle;
-                newNumber();
+                newSymbol();
             }
             else
             {

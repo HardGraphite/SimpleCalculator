@@ -13,7 +13,7 @@ TARGET = calc
 
 all: $(OBJ) main.cc
 	$(AR) -crv $(BINDIR)/lib$(TARGET).a
-	$(CXX) $(CFLAG) -I$(INCDIR) -o $(BINDIR)/$(TARGET) $^
+	$(CXX) $(CFLAG) -I$(INCDIR) -lreadline -o $(BINDIR)/$(TARGET) $^
 
 PHONY: c
 c: $(OBJ)

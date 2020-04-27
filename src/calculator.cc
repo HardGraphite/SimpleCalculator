@@ -10,15 +10,43 @@ using namespace hgl::calc;
 
 double hgl::calc::calculate(const char * expr)
 {
-    std::stringstream ss;
-    ss.str(expr);
-    return calculate(ss);
+    Calculator c;
+    return c.calculate(expr);
 }
 
 double hgl::calc::calculate(std::istream & expr)
 {
-    Scanner scanner;
-    Parser parser;
+    Calculator c;
+    return c.calculate(expr);
+}
 
-    return evaluate(parser.parse(scanner.scan(expr)));
+
+Calculator::Calculator():
+    cfnpool(&BuiltinCalcFnPool)
+{
+}
+
+Calculator::Calculator(const CalcFnPool && calcfnpool):
+    cfnpool(std::move(calcfnpool))
+{
+}
+
+double Calculator::calculate(const char * expr)
+{
+    std::stringstream ss;
+    ss.str(expr);
+    return this->calculate(ss);
+}
+
+double Calculator::calculate(std::istream & expr)
+{
+    auto ans = evaluate(
+        this->parser.parse(this->scanner.scan(expr)),
+        &this->cfnpool,
+        &this->memory
+    );
+
+    this->memory.setValue("ans", ans);
+
+    return ans;
 }

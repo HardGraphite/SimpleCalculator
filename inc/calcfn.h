@@ -1,7 +1,8 @@
 #pragma once
 
+#include <cstr.h>
+
 #include <map>
-#include <cstring>
 
 namespace hgl
 {
@@ -24,15 +25,7 @@ namespace hgl
             }
         };
 
-        struct _cstr_lt
-        {
-            bool operator()(const char * s1, const char * s2) const
-                {return strcmp(s1, s2) < 0;}
-        };
-
-        // using CalcFnPool = std::map<const char *, CalcFn, _cstr_lt>;
-        
-        class CalcFnPool: public std::map<const char *, CalcFn, _cstr_lt>
+        class CalcFnPool: public std::map<const char *, CalcFn, less<const char*> >
         {
         private:
             const CalcFnPool * inherit;
@@ -41,13 +34,18 @@ namespace hgl
             CalcFnPool(const CalcFnPool * inherit = nullptr):
                 map(), inherit(inherit) {}
             CalcFnPool(std::initializer_list<value_type> _l):
-                map(_l) {}
+                map(_l), inherit(nullptr) {}
 
             const CalcFn & operator[] (const char * n) const
             {
                 auto iter = this->find(n);
                 if (iter == this->end())
-                    throw std::runtime_error("cannot find the function");
+                {
+                    if (this->inherit != nullptr)
+                        return (*this->inherit)[n];
+                    else
+                        throw std::runtime_error("cannot find the function");
+                }
                 else
                     return iter->second;
             }

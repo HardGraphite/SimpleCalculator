@@ -17,7 +17,11 @@ static std::int8_t priority(char opr)
         return 4;
 
     case '~':
+    case '$':
         return INT8_MAX - 1;
+
+    case '=':
+        return INT8_MIN + 1;
 
     default:
         return INT8_MIN;
