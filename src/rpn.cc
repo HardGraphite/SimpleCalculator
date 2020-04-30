@@ -49,7 +49,7 @@ TokenStream Parser::toRPN(TokenStream && in)
         case Token::Type::Operator :
             if (token.asOperator() == ',')
             {
-                if (!this->tstack.empty() && this->tstack.top() != sym_call_function)
+                while (!this->tstack.empty() && this->tstack.top() != sym_call_function)
                 {
                     auto & top = this->tstack.top();
                     out << top;

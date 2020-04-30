@@ -156,29 +156,28 @@ bool Token::operator<(const Token & t) const noexcept
 
 std::ostream & hgl::calc::operator<<(std::ostream & os, const Token & t)
 {
-/* 
+
     switch (t.type)
     {
     case Token::Type::Number :
-        os << "<Number: " << t.value.num << ">";
+        os << "<Number: “" << t.value.num << "”>";
         break;
 
     case Token::Type::Operator :
-        os << "<Operator: " << t.value.opr << ">";
+        os << "<Operator: “" << t.value.opr << "”>";
         break;
 
     case Token::Type::Symbol :
-        os << "<Symbol: " << t.value.sym << ">";
+        os << "<Symbol: “" << t.value.sym << "”>";
         break;
 
     default:
         os << "<?>";
         break;
     }
-*/
 
 
-    switch (t.type)
+    /* switch (t.type)
     {
     case Token::Type::Number :
         os << t.value.num;
@@ -195,7 +194,7 @@ std::ostream & hgl::calc::operator<<(std::ostream & os, const Token & t)
     default:
         os << "<?>";
         break;
-    }
+    } */
 
     return os;
 }
