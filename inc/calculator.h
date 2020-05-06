@@ -11,9 +11,9 @@ namespace hgl
 {
     namespace calc
     {
-        // evaluate a expression
+        // evaluate an expression
         double calculate(const char * expr);
-        // evaluate a expression
+        // evaluate an expression
         double calculate(std::istream & expr);
 
 
@@ -29,9 +29,9 @@ namespace hgl
             Calculator();
             Calculator(const CalcFnPool && calcfnpool);
 
-            // evaluate a expression
+            // evaluate an expression
             double calculate(const char * expr);
-            // evaluate a expression
+            // evaluate an expression
             double calculate(std::istream & expr);
 
             // add calculation function
