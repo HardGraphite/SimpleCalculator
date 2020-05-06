@@ -25,6 +25,7 @@ namespace hgl
             }
         };
 
+        // calculate function pool
         class CalcFnPool: public std::map<const char *, CalcFn, less<const char*> >
         {
         private:

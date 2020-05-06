@@ -50,3 +50,8 @@ double Calculator::calculate(std::istream & expr)
 
     return ans;
 }
+
+void Calculator::add_function(const char * name, const CalcFn & fn)
+{
+    this->cfnpool.insert(std::make_pair(name, fn));
+}

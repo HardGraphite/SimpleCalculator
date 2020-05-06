@@ -14,7 +14,7 @@
 
 ### 交互模式
 
-*注意：编译时需要 `readline`库，否则请将宏`CALC_USE_READLINE` 定义为 `false`。*
+*注意：编译时需要 `readline`库，否则请将宏`USE_READLINE` 定义为 `false`。*
 
 不使用任何命令行参数启动`calc`以进入交互模式。
 
