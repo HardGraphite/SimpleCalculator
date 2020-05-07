@@ -1,5 +1,5 @@
 #include <syntax.h>
-
+#include <error.h>
 
 using namespace hgl::calc;
 
@@ -120,7 +120,10 @@ TokenStream Parser::toRPN(TokenStream && in)
     {
         auto & x = this->tstack.top();
         if (x == '(')
-            throw std::runtime_error("unmatched brackets");
+        {
+            this->clear();
+            throw SyntaxError("unmatched brackets");
+        }
         out << x;
         this->tstack.pop();
     }

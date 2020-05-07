@@ -29,17 +29,41 @@ int main(int argc, char const *argv[])
             if (line[0] == '\0')
                 continue;
             add_history(line);
-            auto result = calculator.calculate(line);
+            try
+            {
+                auto result = calculator.calculate(line);
+                std::cout << "\t = " << result << std::endl;
+            }
+            catch (const SyntaxError & e)
+            {
+                std::cerr << "SyntaxError: " << e.what() << std::endl;
+            }
+            catch (const FatalError & e)
+            {
+                std::cerr << "FatalError: " << e.what() << std::endl;
+                return EXIT_FAILURE;
+            }
             std::free(line);
-            std::cout << "\t = " << result << std::endl;
 #else
             std::cout << "> " << std::flush;
             char linebuffer[256];
             std::cin.getline(linebuffer, 255);
             if (linebuffer[0] == '\0')
                 continue;
-            auto result = calculator.calculate(linebuffer);
-            std::cout << "\t = " << result << std::endl;
+            try
+            {
+                auto result = calculator.calculate(linebuffer);
+                std::cout << "\t = " << result << std::endl;
+            }
+            catch (const SyntaxError & e)
+            {
+                std::cerr << "SyntaxError: " << e.what() << std::endl;
+            }
+            catch (const FatalError & e)
+            {
+                std::cerr << "FatalError: " << e.what() << std::endl;
+                return EXIT_FAILURE;
+            }
 #endif // USE_READLINE
         }
     }
@@ -53,8 +77,20 @@ int main(int argc, char const *argv[])
             std::cin.getline(linebuffer, 255);
             if (linebuffer[0] == '\0')
                 continue;
-            auto result = calculator.calculate(linebuffer);
-            std::cout << result << std::endl;
+            try
+            {
+                auto result = calculator.calculate(linebuffer);
+                std::cout << result << std::endl;
+            }
+            catch (const SyntaxError & e)
+            {
+                std::cerr << "SyntaxError: " << e.what() << std::endl;
+            }
+            catch (const FatalError & e)
+            {
+                std::cerr << "FatalError: " << e.what() << std::endl;
+                return EXIT_FAILURE;
+            }
         }
     }
     else // read from cmdline args
@@ -64,7 +100,15 @@ int main(int argc, char const *argv[])
         for (int i = 1; i < argc; i++)
             ss << ' ' << argv[i] << ' ';
 
-        std::cout << ss.str() << " = " << calculate(ss) << std::endl;
+        try
+        {
+            std::cout << ss.str() << " = " << calculate(ss) << std::endl;
+        }
+        catch (const Error & e)
+        {
+            std::cerr << "Error: " << e.what() << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     return 0;

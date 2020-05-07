@@ -62,6 +62,11 @@ namespace hgl
         public:
             // parse token stream and generate AST
             AST parse(TokenStream && in);
+
+            void clear() {
+                while (!this->nstack.empty()) this->nstack.pop();
+                while (!this->tstack.empty()) this->tstack.pop();
+            }
         };
 
 

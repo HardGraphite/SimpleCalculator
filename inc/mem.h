@@ -1,5 +1,7 @@
 #pragma once
 
+#include <error.h>
+
 #include <map>
 #include <memory>
 #include <string>
@@ -22,7 +24,7 @@ namespace hgl
             {
                 auto iter = this->find(n);
                 if (iter == this->end())
-                    throw std::runtime_error("cannot find the value");
+                    throw SyntaxError("undefined name: '%s'", n);
                 else
                     return iter->second;
             }

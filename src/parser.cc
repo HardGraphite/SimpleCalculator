@@ -1,5 +1,5 @@
 #include <syntax.h>
-
+#include <error.h>
 
 using namespace hgl::calc;
 
@@ -39,7 +39,11 @@ AST Parser::parse(TokenStream && ts)
 
                 auto n = oprdcnt(node.value.asOperator());
                 if (n > this->nstack.size())
-                        throw std::runtime_error("no enough tokens in this->nstack");
+                {
+                    this->clear();
+                    throw SyntaxError("no enough tokens, "
+                        "check if the expression is complete");
+                }
 
                 while (n--)
                 {
@@ -56,7 +60,11 @@ AST Parser::parse(TokenStream && ts)
             if (token == sym_call_function)
             {
                 if (in.empty())
-                    throw std::runtime_error("in-stream error");
+                {
+                    this->clear();
+                    throw FatalError(
+                        "in-stream error, unexpected CALL_FUNCTION mark");
+                }
 
                 AST::Node node(in.get());
 
@@ -84,7 +92,11 @@ AST Parser::parse(TokenStream && ts)
     }
 
     if (this->nstack.size() != 1)
-        throw std::runtime_error("too many tokens left in stack");
+    {
+        this->clear();
+        throw SyntaxError("too many tokens left, "
+            "check if the expression is complete", this->nstack.size());
+    }
 
     AST res(this->nstack.top());
     this->nstack.pop(); // clear stack

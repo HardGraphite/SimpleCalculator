@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstr.h>
+#include <error.h>
 
 #include <map>
 
@@ -20,7 +21,9 @@ namespace hgl
             double operator() (OprdList oprds, unsigned int oprdn) const
             {
                 if (this->oprdn != oprdn)
-                    throw std::runtime_error("unmatched oprdn");
+                    throw SyntaxError(
+                        "unmatched operand number, %d expected but %d given",
+                        this->oprdn, oprdn);
                 return (this->handle)(oprds);
             }
         };
@@ -45,7 +48,7 @@ namespace hgl
                     if (this->inherit != nullptr)
                         return (*this->inherit)[n];
                     else
-                        throw std::runtime_error("cannot find the function");
+                        throw SyntaxError("undefined function: %s", n);
                 }
                 else
                     return iter->second;
