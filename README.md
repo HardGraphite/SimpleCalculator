@@ -113,3 +113,13 @@ sin(2 * $pi * 0.5)
 log(6 ^ (12 / 2), 1 + 2 + 3)
 pow(2 10)
 ```
+
+
+## C动态库
+
+动态库为 `bin/libcalc.so`。
+头文件 `inc/dlapi.h` 中提供了可以被C程序调用的接口：
+“`void * calc_init(void)`”、“`double calc_evaluate(void *, const char *)`”和“`void calc_cleanup(void *)`”。
+其中，“`void * calc_init(void)`”和“`void calc_cleanup(void *)`”用于创建和清理计算器；“`double calc_evaluate(void *, const char *)`”用于执行计算。
+
+如果需要用Python调用此动态库，可用参考`test/tst_dl.py`。
